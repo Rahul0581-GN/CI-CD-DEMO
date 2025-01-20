@@ -7,17 +7,22 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Change to use Windows environment
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install Salesforce CLI
+        run: |
+          Invoke-WebRequest -Uri "https://developer.salesforce.com/media/salesforce-cli/sfdx-windows-x64.tar.xz" -OutFile "sfdx-windows-x64.tar.xz"
+          tar -xvf sfdx-windows-x64.tar.xz
+          .\sfdx\install
+
       - name: Authenticate with Salesforce
-        uses: sfdx-actions/authenticate@v1
-        with:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo ${{ secrets.SFDX_AUTH_URL }} | .\sfdx\bin\sfdx force:auth:sfdxurl:store -f - -a MyOrg
 
       - name: Deploy Metadata
         run: |
-          sfdx force:source:deploy -p force-app
+          .\sfdx\bin\sfdx force:source:deploy -p force-app
