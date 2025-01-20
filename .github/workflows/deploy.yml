@@ -1,0 +1,26 @@
+name: Deploy to Salesforce
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Salesforce
+        uses: sfdx-actions/authenticate@v1
+        with:
+          method: jwt
+          client-id: ${{ secrets.SALESFORCE_CLIENT_ID }}
+          jwt-key: ${{ secrets.SALESFORCE_JWT_KEY }}
+          username: ${{ secrets.SALESFORCE_USERNAME }}
+
+      - name: Deploy Metadata
+        run: |
+          sfdx force:source:deploy -p force-app
