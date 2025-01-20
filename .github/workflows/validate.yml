@@ -1,17 +1,22 @@
-name: Validate Production Pull Request
+name: Deploy to Salesforce
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
-  
+      - main
+
 jobs:
-  validate:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Validate on ${{ vars.ENVIRONMENT_NAME }}
-        uses: jawills/sf-deploy@v1.0
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Salesforce
+        uses: sfdx-actions/authenticate@v1
         with:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-          DRY_RUN: true
+        SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+      - name: Deploy Metadata
+        run: |
+          sfdx force:source:deploy -p force-app
