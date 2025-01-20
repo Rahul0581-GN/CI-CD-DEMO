@@ -16,7 +16,8 @@ jobs:
       - name: Authenticate with Salesforce
         uses: sfdx-actions/authenticate@v1
         with:
-        SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+
       - name: Deploy Metadata
         run: |
           sfdx force:source:deploy -p force-app
