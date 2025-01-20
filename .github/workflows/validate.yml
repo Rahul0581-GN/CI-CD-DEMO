@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest  # Change to use Windows environment
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -15,9 +15,8 @@ jobs:
 
       - name: Install Salesforce CLI
         run: |
-          Invoke-WebRequest -Uri "https://developer.salesforce.com/media/salesforce-cli/sfdx-windows-x64.tar.xz" -OutFile "sfdx-windows-x64.tar.xz"
-          tar -xvf sfdx-windows-x64.tar.xz
-          .\sfdx\install
+          Invoke-WebRequest -Uri "https://developer.salesforce.com/media/salesforce-cli/sfdx-windows.exe" -OutFile "sfdx-windows.exe"
+          Start-Process -FilePath "sfdx-windows.exe" -ArgumentList "/quiet" -Wait
 
       - name: Authenticate with Salesforce
         run: |
